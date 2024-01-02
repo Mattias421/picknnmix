@@ -1,0 +1,11 @@
+feats:
+  hop_length: 5
+  win_length: 25
+  dataset: musdb
+
+km_model:
+  k: 128
+
+knn:
+  n_neighbors: 5
+  metric: cosine
