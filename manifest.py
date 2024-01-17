@@ -10,10 +10,15 @@ import argparse
 import os
 import soundfile
 
-SPLIT = 'test'
+parser = argparse.ArgumentParser()
+parser.add_argument('--split', type=str, default='test')
+parser.add_argument('--root', type=str)
+parser.add_argument('--root_manifest', type=str)
+args = parser.parse_args()
 
-ROOT = f'/mnt/parscratch/users/cadenza/data/cad_icassp_2024/audio/at_mic_music/{SPLIT}'
-ROOT_MANIFEST = f'/mnt/parscratch/users/cadenza/cadenza_friendz/clarity/recipes/cad_icassp_2024/baseline/k_means/manifest/{SPLIT}'
+SPLIT = args.split
+ROOT = args.root
+ROOT_MANIFEST = args.root_manifest
 
 os.makedirs(os.path.dirname(ROOT_MANIFEST), exist_ok=True)
 vocals_f = open(os.path.join(ROOT_MANIFEST, f'vocals.tsv'), 'w')

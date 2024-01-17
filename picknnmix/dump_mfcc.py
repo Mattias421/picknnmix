@@ -24,8 +24,10 @@ logger = logging.getLogger("dump_mfcc_feature")
 
 
 class MfccFeatureReader(object):
-    def __init__(self, sample_rate):
+    def __init__(self, sample_rate, frame_length, frame_shift):
         self.sample_rate = sample_rate
+        self.frame_length = frame_length
+        self.frame_shift = frame_shift
 
     def read_audio(self, path, ref_len=None):
         wav = get_features_or_waveform(path, need_waveform=True, use_sample_rate=self.sample_rate)
@@ -43,8 +45,8 @@ class MfccFeatureReader(object):
                 waveform=x,
                 sample_frequency=self.sample_rate,
                 use_energy=False,
-                frame_length=5,
-                frame_shift=1
+                frame_length=self.frame_length,
+                frame_shift=self.frame_shift,
             )  # (time, freq)
             mfccs = mfccs.transpose(0, 1)  # (freq, time)
             deltas = torchaudio.functional.compute_deltas(mfccs)
@@ -54,8 +56,8 @@ class MfccFeatureReader(object):
             return concat
 
 
-def main(tsv_dir, split, nshard, rank, feat_dir, sample_rate):
-    reader = MfccFeatureReader(sample_rate)
+def main(tsv_dir, split, nshard, rank, feat_dir, sample_rate, frame_length=25, frame_shift=10):
+    reader = MfccFeatureReader(sample_rate, frame_length, frame_shift)
     generator, num = get_path_iterator(f"{tsv_dir}/{split}.tsv", nshard, rank)
     dump_feature(reader, generator, num, split, nshard, rank, feat_dir)
 
@@ -70,6 +72,8 @@ if __name__ == "__main__":
     parser.add_argument("rank", type=int)
     parser.add_argument("feat_dir")
     parser.add_argument("--sample_rate", type=int, default=44100)
+    parser.add_argument("--frame_length", type=int, default=25)
+    parser.add_argument("--frame_shift", type=int, default=10)
     args = parser.parse_args()
     logger.info(args)
 

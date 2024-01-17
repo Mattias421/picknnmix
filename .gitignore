@@ -1,1 +1,3 @@
-/outputs
+outputs/
+features/
+__pycache__/
