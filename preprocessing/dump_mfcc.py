@@ -56,21 +56,21 @@ class MfccFeatureReader(object):
             return concat
 
 
-def main(tsv_dir, split, nshard, rank, feat_dir, sample_rate, frame_length=25, frame_shift=10):
+def main(stem, tsv_dir, nshard, rank, feat_dir, sample_rate, frame_length=25, frame_shift=10):
     reader = MfccFeatureReader(sample_rate, frame_length, frame_shift)
-    generator, num = get_path_iterator(f"{tsv_dir}/{split}.tsv", nshard, rank)
-    dump_feature(reader, generator, num, split, nshard, rank, feat_dir)
+    generator, num = get_path_iterator(f"{tsv_dir}/{stem}.tsv", nshard, rank)
+    dump_feature(reader, generator, num, stem, nshard, rank, feat_dir)
 
 
 if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("tsv_dir")
-    parser.add_argument("split")
-    parser.add_argument("nshard", type=int)
-    parser.add_argument("rank", type=int)
-    parser.add_argument("feat_dir")
+    parser.add_argument("--stem")
+    parser.add_argument("--tsv_dir")
+    parser.add_argument("--nshard", type=int)
+    parser.add_argument("--rank", type=int)
+    parser.add_argument("--feat_dir")
     parser.add_argument("--sample_rate", type=int, default=44100)
     parser.add_argument("--frame_length", type=int, default=25)
     parser.add_argument("--frame_shift", type=int, default=10)

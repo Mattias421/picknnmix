@@ -27,10 +27,7 @@ bass_f = open(os.path.join(ROOT_MANIFEST, f'bass.tsv'), 'w')
 other_f = open(os.path.join(ROOT_MANIFEST, f'other.tsv'), 'w')
 mixture_f = open(os.path.join(ROOT_MANIFEST, f'mixture.tsv'), 'w')
 
-if SPLIT == 'test':
-    stem_dict = {'mixture': mixture_f}
-else:
-    stem_dict = {'vocals': vocals_f, 'drums': drums_f, 'bass': bass_f, 'other': other_f, 'mixture': mixture_f}
+stem_dict = {'vocals': vocals_f, 'drums': drums_f, 'bass': bass_f, 'other': other_f, 'mixture': mixture_f}
 
 for f in stem_dict.values():
     print(ROOT, file=f)
